@@ -1,0 +1,39 @@
+# Run from the webapp/ directory:  docker compose up --build
+# The build context is the parent dir so the backend image can include src/.
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: webapp/backend/Dockerfile
+    environment:
+      FASHION_DATA_DIR: /app-data
+      FASHION_MODELS_DIR: /app/models
+      FASHION_PASSWORD: ${FASHION_PASSWORD:-changeme}
+      FASHION_SECRET_KEY: ${FASHION_SECRET_KEY:-dev-secret-please-change}
+    volumes:
+      # Persisted user data: wardrobe images, feature caches, wear log
+      - ./data:/app-data
+      # Mount the trained model weights from the parent project
+      - ../models:/app/models:ro
+      # Mount the ML source so src/ changes do not require rebuilding
+      - ../src:/app/src:ro
+      # Mount the FastAPI app code too. Edit + `docker compose restart backend`
+      # picks up changes without a rebuild.
+      - ./backend/app:/app/app:ro
+    ports:
+      # Exposed directly for local API checks. The frontend container also
+      # proxies /api here.
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: webapp/frontend/Dockerfile
+    depends_on:
+      - backend
+    ports:
+      # Change the host side if 8080 is already in use on your machine.
+      - "${FASHION_WEB_PORT:-8080}:80"
+    restart: unless-stopped

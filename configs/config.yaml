@@ -1,0 +1,89 @@
+# Wardrobe Outfit Recommendation System Configuration
+
+# Device settings
+device:
+  # Options: "auto", "mps", "cuda", "cpu"
+  # "auto" will detect MPS on Apple Silicon, CUDA on NVIDIA, else CPU
+  type: "auto"
+
+# Data paths
+data:
+  polyvore_dir: "data/polyvore"
+  samples_dir: "data/samples"
+  user_wardrobe_dir: "data/user_wardrobe"
+  models_dir: "models"
+
+# Garment Recognition (Stage 1)
+recognition:
+  backbone: "efficientnet_b0"  # Options: efficientnet_b0, resnet18
+  num_classes: 5
+  categories:
+    - "tops"
+    - "bottoms"
+    - "dresses"
+    - "shoes"
+    - "accessories"
+  input_size: 224
+  pretrained: true
+
+  # Training
+  batch_size: 32
+  learning_rate: 0.0001
+  epochs: 20
+  early_stopping_patience: 5
+
+# Attribute Extraction (Stage 2)
+attributes:
+  color:
+    n_colors: 5
+    color_space: "LAB"  # Options: LAB, HSV
+    min_percentage: 0.05  # Minimum percentage to include color
+
+  # Basic color names for mapping
+  color_names:
+    - "red"
+    - "orange"
+    - "yellow"
+    - "green"
+    - "blue"
+    - "purple"
+    - "pink"
+    - "brown"
+    - "black"
+    - "white"
+    - "gray"
+
+# Compatibility Modeling (Stage 3)
+compatibility:
+  embedding_dim: 64
+  visual_feature_dim: 1280  # EfficientNet-B0 output
+  color_feature_dim: 15     # 5 colors x 3 (LAB)
+  use_type_aware: true
+
+  # Training
+  batch_size: 256
+  learning_rate: 0.00005
+  epochs: 50
+  triplet_margin: 0.2
+  early_stopping_patience: 10
+
+# Outfit Generation (Stage 4)
+generation:
+  max_outfits: 10
+  min_compatibility_score: 0.6
+  diversity_weight: 0.2
+
+  # Outfit templates (required categories)
+  templates:
+    casual:
+      - "tops"
+      - "bottoms"
+      - "shoes"
+    formal:
+      - "tops"
+      - "bottoms"
+      - "shoes"
+      - "accessories"
+    simple:
+      - "tops"
+      - "bottoms"

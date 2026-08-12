@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+venv/
+.venv/
+
+# OS / editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+!**/.env.example
+webapp/.env
+
+# Frontend build output
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+webapp/frontend/node_modules/
+webapp/frontend/dist/
+
+# Local app data
+webapp/data/
+
+# Datasets and generated feature caches
+data/fashion_mnist/
+data/deepfashion/
+data/deepfashion2/
+data/polyvore/
+data/processed/
+
+# Training artifacts that can be recreated
+*.pkl
+*.tar.gz
+
+# Model weights in models/ are small enough to keep in this repo.
