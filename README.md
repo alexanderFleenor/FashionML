@@ -26,7 +26,7 @@ The web app is the easiest version to try live because it lets you add clothing 
 Fashion/
 ├── src/                    # Core ML pipeline
 │   ├── attributes/         # Color extraction and pattern detection
-│   ├── compatibility/      # Siamese compatibility model and scoring
+│   ├── compatibility/      # Compatibility model and scoring
 │   ├── data/               # Wardrobe storage helpers
 │   ├── generation/         # Outfit generation and explanations
 │   └── recognition/        # Garment classifier
